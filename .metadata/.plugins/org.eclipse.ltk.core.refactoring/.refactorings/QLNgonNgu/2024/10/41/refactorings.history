@@ -1,0 +1,4 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<session version="1.0">
+<refactoring comment="Rename type &apos;swingapp.Panel&apos; to &apos;DefaultPanel&apos;&#x0D;&#x0A;- Original project: &apos;QLNgonNgu&apos;&#x0D;&#x0A;- Original element: &apos;swingapp.Panel&apos;&#x0D;&#x0A;- Renamed element: &apos;swingapp.DefaultPanel&apos;&#x0D;&#x0A;- Update references to refactored element&#x0D;&#x0A;- Update textual occurrences in comments and strings" description="Rename type &apos;Panel&apos;" flags="589830" id="org.eclipse.jdt.ui.rename.type" input="/src&lt;swingapp{Panel.java[Panel" matchStrategy="1" name="DefaultPanel" qualified="false" references="true" similarDeclarations="false" stamp="1728589483883" textual="false" version="1.0"/>
+</session>

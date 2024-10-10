@@ -1,0 +1,7 @@
+package SwingComponents;
+
+import java.awt.*;
+
+public class Menubar {
+	
+}

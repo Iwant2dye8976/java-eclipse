@@ -1,0 +1,163 @@
+package TH1;
+
+import java.io.*;
+import java.util.*;
+
+public class Language implements ProgrammingLanguage, Serializable, SaveNLoad {
+	private static final long serialVersionUID = 1L;
+	private int release_year;
+	private String author, name;
+	private String[] usages = new String[5];
+
+	public Language() {
+	}
+
+	public Language(int release_year_, String author_, String name_, String[] usages_) {
+		release_year = release_year_;
+		author = author_;
+		name = name_;
+		usages = usages_;
+	}
+
+	@Override
+	// Cac getter va setter
+	public int getReleaseYear() {
+		return this.release_year;
+	}
+
+	@Override
+	public String getAuthor() {
+		return this.author;
+	}
+
+	@Override
+	public String getName() {
+		return this.name;
+	}
+
+	@Override
+	public String[] getUsages() {
+		return this.usages;
+	}
+
+	public void setReleaseYear(int release_year) {
+		this.release_year = release_year;
+	}
+
+	public void setAuthor(String author_) {
+		this.author = author_;
+	}
+
+	public void setName(String name_) {
+		this.name = name_;
+	}
+
+	public void setUsages(String[] usages_) {
+		this.usages = usages_;
+	}
+
+	@Override
+	public void input() {
+		Scanner sc = new Scanner(System.in);
+		while (true) {
+			try {
+				System.out.println("=================");
+				System.out.print("Năm phát hành: ");
+				release_year = sc.nextInt();
+				sc.nextLine();
+				while (release_year <= 0) {
+					System.out.println("Năm không được <= 0.");
+					System.out.println("Hãy nhập lại năm phát hành: ");
+					release_year = sc.nextInt();
+					sc.nextLine();
+				}
+				break;
+			} catch (InputMismatchException e) {
+				System.out.println("Sai định dạng dữ liệu, hãy nhập lại!");
+				sc.nextLine();
+			}
+		}
+		System.out.print("Tên tác giả: ");
+		author = sc.nextLine();
+
+		System.out.print("Tên ngôn ngữ: ");
+		name = sc.nextLine();
+
+		System.out.println("Nhập tối đa 5 ứng dụng(nhập 'end' để dừng): ");
+		for (int i = 0; i < usages.length; i++) {
+			System.out.print("Ứng dụng thứ " + (i + 1) + ": ");
+			String usage = sc.nextLine();
+			if (usage.equalsIgnoreCase("end")) {
+				break;
+			}
+			usages[i] = usage;
+		}
+
+	}
+
+	@Override
+	public void output() {
+		System.out.println("Thông tin về ngôn ngữ:");
+		System.out.println("Tên: " + name);
+		System.out.println("Năm phát hành: " + release_year);
+		System.out.println("Tác giả: " + author);
+		System.out.print("Các ứng dụng: \n");
+
+		for (String usage : usages) {
+			if (usage != null) {
+				System.out.println("-" + usage);
+			}
+		}
+	}
+	
+	@Override
+	public String toString() {
+		return "Language{" + "Year:" + this.release_year +", Name:" + this.name + ", Author:" + this.author +", Usages: "+ this.usages + "}";
+	}
+	
+	
+
+	@Override
+	public void WriteObjectToFile() {
+		File file = new File("Language.dat");
+		try (FileOutputStream out = new FileOutputStream(file, true);
+				ObjectOutputStream objectOut = new ObjectOutputStream(out);) {
+
+			objectOut.writeObject(this);
+			objectOut.close();
+			System.out.println("Đối tượng đã được ghi vào file.");
+		} catch (IOException e) {
+			System.out.println("Đã xảy ra lỗi: " + e.getMessage());
+		}
+
+	}
+
+	@Override
+	public void ReadObjectFromFile(){
+		File file = new File("Language.dat");
+		try {
+			FileInputStream in = new FileInputStream(file);
+			ObjectInputStream objectIn = new ObjectInputStream(in);
+			while (true) {
+				try {
+					Vector<Language> lang = (Vector<Language>)objectIn.readObject();
+//					lang = (ArrayList<Language>) objectIn.readObject(); // Đọc đối tượng tiếp theo
+					Iterator<Language> it = lang.iterator();
+					while(it.hasNext()) {
+						Language l = it.next();
+						l.output();
+					}
+					System.out.println("Đọc thành công đối tượng:");
+					System.out.println(lang);
+				} catch (EOFException e) {
+					// Đạt tới cuối file, thoát khỏi vòng lặp
+					System.out.println("Đã đọc hết tất cả các đối tượng trong file.");
+					break;
+				}
+			}
+			objectIn.close();
+		} catch (IOException | ClassNotFoundException e) {
+			System.out.println("Đã xảy ra lỗi trong quá trình đọc file: " + e.getMessage());
+		}
+	}
+}

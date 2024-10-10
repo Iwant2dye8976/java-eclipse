@@ -1,0 +1,17 @@
+package SwingComponents;
+
+import javax.swing.*;
+
+public class Menubar {
+	public MenuBar() {};
+	 JMenuBar menubar = new JMenuBar();
+     JMenu features = new JMenu("Menu");
+     JMenu about = new JMenu("About");
+     JMenuItem view = new JMenuItem("Xem danh sách ngôn ngữ lập trình");
+     JMenuItem add = new JMenuItem("Thêm ngôn ngữ lập trình");
+     JMenuItem delete = new JMenuItem("Xóa ngôn ngữ lập trình");
+     JMenuItem search = new JMenuItem("Tìm kiếm ngôn ngữ lập trình");
+     features.add(view);features.add(add);features.add(delete);features.add(search);
+     menubar.add(features);
+     menubar.add(about);
+}

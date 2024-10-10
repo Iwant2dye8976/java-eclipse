@@ -1,0 +1,9 @@
+package TH1;
+
+import java.io.*;
+
+public interface SaveNLoad {
+	public void addBinLanguage() throws IOException, ClassNotFoundException;
+
+	public void loadBinLanguages() throws IOException, ClassNotFoundException;
+}

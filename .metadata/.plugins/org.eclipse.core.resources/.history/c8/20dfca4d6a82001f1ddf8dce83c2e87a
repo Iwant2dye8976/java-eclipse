@@ -1,0 +1,9 @@
+package TH1;
+
+import java.io.IOException;
+
+public interface SaveNLoad {
+	public void WriteObjectToFile() throws IOException;
+
+	public void ReadObjectFromFile();
+}

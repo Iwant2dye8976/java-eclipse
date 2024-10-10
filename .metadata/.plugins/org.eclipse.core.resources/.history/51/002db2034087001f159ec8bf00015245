@@ -1,0 +1,17 @@
+package TH1;
+
+import javax.swing.*;
+
+public class Panel {
+	private JPanel panel;
+
+    public Panel() {
+        panel = new JPanel();
+        JLabel label = new JLabel("HelloNigga!");
+        panel.add(label);
+    }
+
+    public JPanel getPanel() {
+        return panel;
+    }
+}

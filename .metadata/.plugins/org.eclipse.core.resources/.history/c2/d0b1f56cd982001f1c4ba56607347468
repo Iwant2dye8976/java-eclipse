@@ -1,0 +1,7 @@
+package TH1;
+
+public interface SaveNLoad {
+	public void addBinLanguage();
+
+	public void loadBinLanguages();
+}

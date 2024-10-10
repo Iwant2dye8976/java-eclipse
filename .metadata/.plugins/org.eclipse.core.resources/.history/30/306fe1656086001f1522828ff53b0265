@@ -1,0 +1,54 @@
+package TH1;
+
+import java.awt.*;
+import java.awt.event.*;
+import java.io.IOException;
+import javax.swing.*;
+
+public class SwingApp {
+    private JPanel contentPanel;
+    private CardLayout cardLayout;
+
+    public SwingApp() {
+        JFrame frame = new JFrame("Quản lý ngôn ngữ");
+        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        frame.setSize(1200, 400);
+
+        cardLayout = new CardLayout();
+        contentPanel = new JPanel(cardLayout);
+
+        MenuBar menuBar = new MenuBar();
+        frame.setJMenuBar(menuBar.getMenuBar());
+
+        // Panel mặc định
+        Panel panel = new Panel();
+        contentPanel.add(panel.getPanel(), "Default");
+
+        // Panel hiển thị dữ liệu
+        try {
+            DisplayLanguages dl = new DisplayLanguages();
+            contentPanel.add(dl.getFPanel(), "Data");
+        } catch (ClassNotFoundException | IOException e) {
+            JOptionPane.showMessageDialog(frame, "Xảy ra lỗi trong khi tạo Panel hiển thị dữ liệu!", "Lỗi", JOptionPane.ERROR_MESSAGE);
+        }
+
+        // Panel thêm ngôn ngữ
+        try {
+            AddLanguage al = new AddLanguage();
+            al.addButtonListener();
+            al.addComboboxListener();
+            contentPanel.add(al.getAddPanel(), "Add_Language");
+
+        menuBar.getView().addActionListener(e -> cardLayout.show(contentPanel, "Data"));
+        menuBar.getAdd().addActionListener(e -> cardLayout.show(contentPanel, "Add_Language"));
+
+        Image icon = Toolkit.getDefaultToolkit().getImage("HelloNigga.jpg");
+        frame.setIconImage(icon);
+        frame.add(contentPanel);
+        frame.setVisible(true);
+    }
+
+    public static void main(String[] args) {
+        SwingUtilities.invokeLater(SwingApp::new);
+    }
+}
