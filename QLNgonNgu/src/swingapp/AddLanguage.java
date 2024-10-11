@@ -13,8 +13,9 @@ public class AddLanguage {
 	private JLabel name, author, release_year, usage, other, type;
 	private JButton add_btn;
 	private JComboBox<String> cbx;
+	private ArrayList<Language> data;
 
-	public AddLanguage() {
+	public AddLanguage(DisplayLanguages dl) {
 		GridBagConstraints gbc = new GridBagConstraints();
 		add_panel = new JPanel(new GridBagLayout());
 
@@ -37,6 +38,42 @@ public class AddLanguage {
 
 		String[] types = { "Java", "Python" };
 		cbx = new JComboBox<>(types);
+		
+		cbx.addActionListener(new ActionListener() {
+
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				if ((String) cbx.getSelectedItem() == "Java") {
+					other.setText("Phiên bản JDK");
+				} else {
+					other.setText("Khả năng tùy biến(Yes hoặc No)");
+				}
+			}
+		});
+		
+		add_btn.addActionListener(new ActionListener() {
+
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				String[] data = getLanguageInfo();
+				if(dl.getDisplay_mode() == 0) { //Display moede = 0: Hiển thị file text | Display mode = 1: Hiển thị file nhị phân 
+					AppHandler.SaveToText(data[0], data[1], Integer.parseInt(data[2]), data[3], data[4].toString(), data[5]);
+				}
+				else {
+					ArrayList<Language> l = AppHandler.getDataTable(dl.getDataTable());
+					if(data[5].contains("Java")) {
+						l.add(new JavaLanguage(Integer.parseInt(data[2]), data[1], data[0], data[3], data[4].toString()));
+					}
+					else {
+						l.add(new PythonLanguage(Integer.parseInt(data[2]), data[1], data[0], data[3], Boolean.parseBoolean(data[4])));
+//						System.out.println(data[4]);
+					}
+					AppHandler.SaveBinLanguage(l);
+				}
+				JOptionPane.showMessageDialog(null, "Thêm thành công!", null, JOptionPane.INFORMATION_MESSAGE);
+				clearTextField();
+			}
+		});
 
 		// Thiết lập GridBagConstraints cho từng thành phần
 		gbc.anchor = GridBagConstraints.NORTHWEST; // Căn lên góc trên bên trái
@@ -97,24 +134,12 @@ public class AddLanguage {
 
 	}
 
-	public void addComboboxListener() {
-		cbx.addActionListener(new ActionListener() {
-
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				if ((String) cbx.getSelectedItem() == "Java") {
-					other.setText("Phiên bản JDK");
-				} else {
-					other.setText("Khả năng tùy biến(Yes hoặc No)");
-				}
-			}
-		});
-	}
-
 	public Boolean convert2Boolean(String isDynamicTyped) {
-		return isDynamicTyped.toLowerCase() == "yes" ? true : false;
+		return isDynamicTyped.toLowerCase().contains("yes") ? true : false;
 	}
 
+	
+	//Lấy thông tin từ các trường nhập thông tin
 	public String[] getLanguageInfo() throws NumberFormatException {
 		String[] text = {};
 		try {
@@ -142,6 +167,7 @@ public class AddLanguage {
 		return text;
 	}
 	
+	//Clear các trường nhập sau khi thêm xong
 	public void clearTextField() {
 		nameT.setText(null);
 		authorT.setText(null);

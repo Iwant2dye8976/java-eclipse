@@ -1,5 +1,7 @@
 package swingapp;
 
+import java.awt.Font;
+
 import javax.swing.*;
 
 public class DefaultPanel {
@@ -8,6 +10,7 @@ public class DefaultPanel {
 	public DefaultPanel() {
 		panel = new JPanel();
 		JLabel label = new JLabel("Quản lý ngôn ngữ lập trình!");
+		label.setFont(new Font("Arial", Font.BOLD, 24));
 		panel.add(label);
 	}
 

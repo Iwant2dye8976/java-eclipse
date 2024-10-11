@@ -7,7 +7,6 @@ import java.util.*;
 
 import javax.swing.*;
 
-
 public class SwingApp {
 	private JPanel contentPanel;
 	private CardLayout cardLayout;
@@ -22,12 +21,13 @@ public class SwingApp {
 		cardLayout = new CardLayout();
 		contentPanel = new JPanel(cardLayout);
 
-		MenuBar menuBar = new MenuBar();
-		frame.setJMenuBar(menuBar.getMenuBar());
-
 		// Panel mặc định
-        DefaultPanel default_panel = new DefaultPanel();
-        contentPanel.add(default_panel.getPanel(), "Default");
+		DefaultPanel default_panel = new DefaultPanel();
+		contentPanel.add(default_panel.getPanel(), "Default");
+
+		DisplayLanguages dl = new DisplayLanguages();
+		
+		Popup_menu popupMenu = new Popup_menu(dl);
 
 		// Panel hiển thị dữ liệu
 		JPanel display_panel = new JPanel();
@@ -36,16 +36,29 @@ public class SwingApp {
 
 		gbc.gridx = 0;
 		gbc.gridy = 0;
+		JLabel label = new JLabel("Danh sách ngôn ngữ");
+		label.setFont(new Font("Arial", Font.BOLD, 24));
+		display_panel.add(label);
+		display_panel.add(Box.createRigidArea(new Dimension(0, 50)));
+
+		gbc.gridx = 0;
+		gbc.gridy = 1;
+		gbc.fill = GridBagConstraints.BOTH;
+
+		SearchLanguage sl = new SearchLanguage(dl);
+		display_panel.add(sl.getSearchPanel(), gbc);
+
+		gbc.gridx = 0;
+		gbc.gridy = 2;
 		gbc.weightx = 1.0; // Mở rộng theo chiều ngang
 		gbc.weighty = 1.0; // Mở rộng theo chiều dọc
 		gbc.fill = GridBagConstraints.BOTH;
 
-		DisplayLanguages dl = new DisplayLanguages();
 		display_panel.add(dl.getFPanel(), gbc);
 
-		DeleteLanguage dlt_l = new DeleteLanguage();
+		DeleteLanguage dlt_l = new DeleteLanguage(dl);
 		gbc.gridx = 0;
-		gbc.gridy = 2;
+		gbc.gridy = 3;
 		gbc.weightx = 0; // Mở rộng theo chiều ngang
 		gbc.weighty = 0; // Mở rộng theo chiều dọc
 		gbc.anchor = GridBagConstraints.CENTER;
@@ -53,60 +66,18 @@ public class SwingApp {
 		display_panel.add(dlt_l.getDelete_btn(), gbc);
 
 		contentPanel.add(display_panel, "Data");
-//            contentPanel.add(dl.getFPanel(), "Data");
 
 		// Panel thêm ngôn ngữ
-		AddLanguage al = new AddLanguage();
-		al.addComboboxListener();
-		al.getAddButton().addActionListener(new ActionListener() {
-
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				data = al.getLanguageInfo();
-				AppHandler.SaveToText(data[0], data[1], Integer.parseInt(data[2]), data[3], data[4], data[5]);
-				JOptionPane.showMessageDialog(null, "Thêm thành công!", null, JOptionPane.INFORMATION_MESSAGE);
-				al.clearTextField();
-			}
-		});
+		AddLanguage al = new AddLanguage(dl);
 		contentPanel.add(al.getAddPanel(), "Add_Language");
 
-		menuBar.getView().addActionListener(new ActionListener() {
-
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				dl.update();
-				cardLayout.show(contentPanel, "Data");
-			}
-		});
-		menuBar.getAdd().addActionListener(e -> cardLayout.show(contentPanel, "Add_Language"));
-		dlt_l.getDelete_btn().addActionListener(new ActionListener() {
-
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				try {
-					ArrayList<Language> lang = AppHandler.loadTextLanguages();
-					int rowCount = dl.getDataTable().getSelectedRowCount();
-					int[] removelist = dl.getSelectedIndexes();
-					if (rowCount < 2) {
-						lang.remove(dl.getSelectedIndex());
-					} else {
-						System.out.println(lang.size());
-						for (int i = removelist.length - 1; i >= 0; i--) {
-							lang.remove(removelist[i]);
-						}
-					}
-					AppHandler.SaveToText2(lang);
-					dl.update();
-					JOptionPane.showMessageDialog(null, "Xóa thành công!", null, JOptionPane.INFORMATION_MESSAGE);
-				} catch (ClassNotFoundException | IOException e1) {
-					JOptionPane.showMessageDialog(null, "Có lỗi xảy ra!", null, JOptionPane.ERROR_MESSAGE);
-				}
-			}
-		});
+		MenuBar menuBar = new MenuBar(cardLayout, contentPanel, dl);
+		frame.setJMenuBar(menuBar.getMenuBar());
 
 		Image icon = Toolkit.getDefaultToolkit().getImage("HelloNigga.jpg");
 		frame.setIconImage(icon);
 		frame.add(contentPanel);
+		frame.setLocationRelativeTo(null);
 		frame.setVisible(true);
 	}
 

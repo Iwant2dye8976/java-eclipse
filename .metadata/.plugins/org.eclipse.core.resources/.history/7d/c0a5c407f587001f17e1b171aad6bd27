@@ -1,0 +1,118 @@
+package swingapp;
+
+import java.awt.*;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
+import java.io.IOException;
+import java.util.ArrayList;
+
+import javax.swing.*;
+import javax.swing.event.ListSelectionEvent;
+import javax.swing.event.ListSelectionListener;
+import javax.swing.table.DefaultTableModel;
+
+public class DisplayLanguages {
+	private int index;
+	private int[] indexes;
+	private JLabel title;
+	private JScrollPane data_panel;
+	private JPanel f_panel;
+	private JTable data_table;
+	private DefaultTableModel tableModel;
+	private String[][] data;
+	private String[] columns = { "Tên gọi", "Tác giả", "Năm phát hành", "Ứng dụng", "Ghi chú" };
+
+//	public DisplayLanguages() {};
+
+	public DisplayLanguages() {
+		try {
+			ArrayList<Language> dt = AppHandler.loadTextLanguages();
+			data = AppHandler.ArrayList2Array(dt);
+		} catch (IOException | ClassNotFoundException e) {
+			JOptionPane.showMessageDialog(null, "Xảy ra lỗi khi thêm ngôn ngữ!", "Lỗi", JOptionPane.ERROR_MESSAGE);
+		}
+
+		data_table = new JTable(data, columns);
+		data_table.getTableHeader().setReorderingAllowed(false);
+//		data_table.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+		data_table.getSelectionModel().addListSelectionListener(new ListSelectionListener() {
+
+			@Override
+			public void valueChanged(ListSelectionEvent e) {
+				{
+					if (!e.getValueIsAdjusting()) {
+						if (data_table.getSelectedRowCount() < 2)
+							index = data_table.getSelectedRow();
+						else {
+							indexes = data_table.getSelectedRows();
+						}
+					}
+				}
+			}
+		});
+
+		// Tạo JScrollPane chứa bảng
+		data_panel = new JScrollPane(data_table);
+
+		// Tạo JPanel và đặt Layout theo BoxLayout
+		f_panel = new JPanel();
+		f_panel.setLayout(new BoxLayout(f_panel, BoxLayout.Y_AXIS));
+
+		// Thêm JScrollPane chứa bảng
+		f_panel.add(data_panel);
+		
+		update();
+	};
+
+	public void update() {
+		try {
+			// Lấy lại dữ liệu mới từ nguồn
+			ArrayList<Language> dt = AppHandler.loadTextLanguages();
+			data = AppHandler.ArrayList2Array(dt);
+			tableModel = new DefaultTableModel(data, columns);
+			data_table.setModel(tableModel);
+
+		} catch (IOException | ClassNotFoundException e) {
+			JOptionPane.showMessageDialog(null, "Xảy ra lỗi khi cập nhật ngôn ngữ!", "Lỗi", JOptionPane.ERROR_MESSAGE);
+		}
+	}
+	
+	private void AddmouseListener() {
+		Popup_menu popup_menu = new Popup_menu();
+		data_table.addMouseListener(new MouseAdapter() {
+			public void mousePressed(MouseEvent e) {
+				if(e.isPopupTrigger()) {
+					showPopup(e);
+				}
+			}
+			
+			public void showPopup(MouseEvent e) {
+				popup_menu.getPopup_menu().show(e.getComponent(), e.getX(), e.getY());;
+			}
+		});
+	}
+
+	public int getSelectedIndex() {
+		return index;
+	}
+
+	public int[] getSelectedIndexes() {
+		return indexes;
+	}
+
+	public JTable getDataTable() {
+		return data_table;
+	}
+
+	public JScrollPane getDataPanel() {
+		return data_panel;
+	}
+
+	public JPanel getFPanel() {
+		return f_panel;
+	}
+	
+	public String[] getColumns() {
+		return columns;
+	}
+}

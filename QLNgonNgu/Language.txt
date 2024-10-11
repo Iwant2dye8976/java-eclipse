@@ -1,2 +1,7 @@
-Dit nhua,Ho Dam,12344567,DIT NHAU LAM THON,false,Python
-Doanh,Nam ki cho,88888,Gay se,4953,Java
+1,2,2,2,2,Java
+4,4,4,4,4,Java
+6,6,6,6,false,Python
+121,12,12345,12,false,Python
+12,12,12,1212,false,Python
+12,12,12,12,true,Python
+12,12,12,12,12,Java

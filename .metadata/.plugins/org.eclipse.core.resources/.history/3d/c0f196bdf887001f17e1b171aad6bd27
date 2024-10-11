@@ -1,0 +1,39 @@
+package swingapp;
+
+import java.awt.event.*;
+import java.awt.*;
+import javax.swing.*;
+
+public class Popup_menu {
+	private JPopupMenu popup_menu;
+	private JMenuItem save2bin, save2text, loadAsbin, loadAstext;
+	
+	public Popup_menu(){
+		popup_menu = new JPopupMenu();
+		save2bin = new JMenuItem("Lưu dưới dạng nhị phân");
+		save2text = new JMenuItem("Lưu dưới dạng văn bản");
+		loadAsbin = new JMenuItem("Tải dữ liệu nhị phân");
+		loadAstext = new JMenuItem("Tải dữ liệu văn bản");
+		
+		popup_menu.add(save2bin);
+		popup_menu.add(save2text);
+		popup_menu.add(loadAsbin);
+		popup_menu.add(loadAstext);
+	}
+	
+	public void menuItemHandler(JTable data_table) {
+		save2text.addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				AppHandler.getDataTable(data_table);
+			}
+		});
+	}
+	
+	
+	
+	public JPopupMenu getPopup_menu() {
+		return popup_menu;
+	}
+}

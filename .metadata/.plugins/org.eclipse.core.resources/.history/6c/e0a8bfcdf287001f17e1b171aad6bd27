@@ -1,0 +1,7 @@
+package swingapp;
+
+import javax.swing.JPopupMenu;
+
+public class Popup_menu {
+	private JPopupMenu popup_menu;
+}

@@ -1,5 +1,0 @@
-package TH1;
-
-public interface SaveNLoad {
-
-}
