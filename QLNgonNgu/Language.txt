@@ -1,1 +1,6 @@
-Java,James Gosling,1995,Android OS,Java SE 23,Java
+1,1,1,1,1,Java
+Java,adad,11212,ad12,1,Java
+Python,bca,1991,ádaaaaa,false,Python
+Java,thanh,1991,quản lý ngôn ngữ,22,Java
+2,2,2,2,2,Java
+2,2,2,2,2,Java

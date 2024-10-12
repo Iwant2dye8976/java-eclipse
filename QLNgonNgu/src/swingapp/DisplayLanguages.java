@@ -12,10 +12,10 @@ import javax.swing.event.ListSelectionListener;
 import javax.swing.table.DefaultTableModel;
 
 public class DisplayLanguages {
-	private int display_mode;
+	private int display_mode = 0;
 	private int index;
 	private int[] indexes;
-	private JLabel title;
+	private JLabel title, loadMode;
 	private JScrollPane data_panel;
 	private JPanel f_panel;
 	private JTable data_table;
@@ -69,9 +69,12 @@ public class DisplayLanguages {
 		f_panel.setLayout(new BoxLayout(f_panel, BoxLayout.Y_AXIS));
 
 		// Thêm JScrollPane chứa bảng
+		loadMode = new JLabel("Chế độ đọc file: Văn bản");
+
+		f_panel.add(loadMode);
 		f_panel.add(data_panel);
 		AddmouseListener();
-		updateText();
+//		updateText();
 	};
 
 	public void updateText() {
@@ -79,9 +82,9 @@ public class DisplayLanguages {
 			// Lấy lại dữ liệu mới từ nguồn
 			ArrayList<Language> dt = AppHandler.getTextLanguages();
 			data = AppHandler.ArrayList2Array(dt);
+			loadMode.setText("Chế độ đọc file: Văn bản");
 			tableModel = new DefaultTableModel(data, columns);
 			data_table.setModel(tableModel);
-
 		} catch (IOException | ClassNotFoundException e) {
 			JOptionPane.showMessageDialog(null, "Xảy ra lỗi khi cập nhật ngôn ngữ!", "Lỗi", JOptionPane.ERROR_MESSAGE);
 		}
@@ -92,9 +95,9 @@ public class DisplayLanguages {
 			// Lấy lại dữ liệu mới từ nguồn
 			ArrayList<Language> dt = AppHandler.getBinLanguages();
 			data = AppHandler.ArrayList2Array(dt);
+			loadMode.setText("Chế độ đọc file: Nhị phân");
 			tableModel = new DefaultTableModel(data, columns);
 			data_table.setModel(tableModel);
-
 		} catch (IOException | ClassNotFoundException e) {
 			JOptionPane.showMessageDialog(null, "Xảy ra lỗi khi cập nhật ngôn ngữ!", "Lỗi", JOptionPane.ERROR_MESSAGE);
 		}
@@ -116,12 +119,12 @@ public class DisplayLanguages {
 			}
 
 			public void showPopup(MouseEvent e) {
-				
+
 				popup_menu.getPopup_menu().show(e.getComponent(), e.getX(), e.getY());
 				;
 			}
 		});
-		
+
 		data_panel.addMouseListener(new MouseAdapter() {
 			public void mousePressed(MouseEvent e) {
 				if (e.isPopupTrigger()) {
@@ -136,7 +139,7 @@ public class DisplayLanguages {
 			}
 
 			public void showPopup(MouseEvent e) {
-				
+
 				popup_menu.getPopup_menu().show(e.getComponent(), e.getX(), e.getY());
 				;
 			}

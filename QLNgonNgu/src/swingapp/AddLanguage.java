@@ -134,6 +134,7 @@ public class AddLanguage {
 //						System.out.println(data[4]);
 					}
 					AppHandler.SaveBinLanguage(l);
+					dl.updateBin();
 				}
 				JOptionPane.showMessageDialog(null, "Thêm thành công!", null, JOptionPane.INFORMATION_MESSAGE);
 				clearTextField();

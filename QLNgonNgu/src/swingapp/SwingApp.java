@@ -74,7 +74,7 @@ public class SwingApp {
 		MenuBar menuBar = new MenuBar(cardLayout, contentPanel, dl);
 		frame.setJMenuBar(menuBar.getMenuBar());
 
-		Image icon = Toolkit.getDefaultToolkit().getImage("HelloNigga.jpg");
+		Image icon = Toolkit.getDefaultToolkit().getImage("BoxIcon.png");
 		frame.setIconImage(icon);
 		frame.add(contentPanel);
 		frame.setLocationRelativeTo(null);

@@ -21,6 +21,11 @@ public class DeleteLanguage extends JButton {
 			public void actionPerformed(ActionEvent e) {
 				try {
 					int rowCount = dl.getDataTable().getSelectedRowCount();
+					if (rowCount == 0) {
+						JOptionPane.showMessageDialog(null, "Vui lòng chọn ngôn ngữ muốn xóa!", null, JOptionPane.WARNING_MESSAGE);
+						return; // Thoát ra nếu chưa có dữ liệu được chọn
+					}
+
 					int[] removelist = dl.getSelectedIndexes();
 					ArrayList<Language> lang = null;
 					if (dl.getDisplay_mode() == 0) {
@@ -52,6 +57,7 @@ public class DeleteLanguage extends JButton {
 				}
 			}
 		});
+
 	}
 
 	public JButton getDelete_btn() {
