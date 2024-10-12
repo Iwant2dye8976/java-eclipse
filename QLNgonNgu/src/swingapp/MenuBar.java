@@ -10,7 +10,7 @@ import javax.swing.*;
 public class MenuBar {
 	private JMenuBar menubar;
 	private JMenu features, about;
-	private JMenuItem view, add, exit;
+	private JMenuItem home, view, add, exit;
 	private CardLayout cardLayout;
 	private JPanel contentPanel;
 
@@ -25,11 +25,14 @@ public class MenuBar {
 		menubar = new JMenuBar();
 		features = new JMenu("Menu");
 		about = new JMenu("About");
-
+		
+		home = new JMenuItem("Home");
 		view = new JMenuItem("Xem danh sách ngôn ngữ lập trình");
 		add = new JMenuItem("Thêm ngôn ngữ lập trình");
 		exit = new JMenuItem("Thoát");
 
+		features.add(home);
+		features.addSeparator();
 		features.add(view);
 		features.add(add);
 		features.addSeparator();
@@ -40,6 +43,15 @@ public class MenuBar {
 	}
 
 	private void addActionListeners(DisplayLanguages dl) {
+		home.addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				cardLayout.show(contentPanel, "Default");
+				
+			}
+		});
+		
 		// Xử lý khi chọn "Xem danh sách ngôn ngữ lập trình"
 		view.addActionListener(e -> {
 			cardLayout.show(contentPanel, "Data");

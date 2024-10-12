@@ -17,11 +17,13 @@ public class Popup_menu {
 		save2text = new JMenuItem("Lưu dưới dạng văn bản");
 		loadAsbin = new JMenuItem("Tải dữ liệu nhị phân");
 		loadAstext = new JMenuItem("Tải dữ liệu văn bản");
-
-		popup_menu.add(save2bin);
-		popup_menu.add(save2text);
+		
 		popup_menu.add(loadAsbin);
 		popup_menu.add(loadAstext);
+		popup_menu.addSeparator();
+		popup_menu.add(save2bin);
+		popup_menu.add(save2text);
+
 		menuItemHandler(dl.getDataTable(), dl);
 	}
 
@@ -65,7 +67,7 @@ public class Popup_menu {
 		});
 		
 		loadAsbin.addActionListener(new ActionListener() {
-			
+
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				try {

@@ -116,6 +116,27 @@ public class DisplayLanguages {
 			}
 
 			public void showPopup(MouseEvent e) {
+				
+				popup_menu.getPopup_menu().show(e.getComponent(), e.getX(), e.getY());
+				;
+			}
+		});
+		
+		data_panel.addMouseListener(new MouseAdapter() {
+			public void mousePressed(MouseEvent e) {
+				if (e.isPopupTrigger()) {
+					showPopup(e);
+				}
+			}
+
+			public void mouseReleased(MouseEvent e) {
+				if (e.isPopupTrigger()) {
+					showPopup(e);
+				}
+			}
+
+			public void showPopup(MouseEvent e) {
+				
 				popup_menu.getPopup_menu().show(e.getComponent(), e.getX(), e.getY());
 				;
 			}

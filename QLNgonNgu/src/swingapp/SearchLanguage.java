@@ -69,10 +69,18 @@ public class SearchLanguage {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				try {
-				ArrayList<Language> lang = AppHandler.getTextLanguages();
+				ArrayList<Language> lang = null;
 				String search_text = search_box.getText().toLowerCase().trim();
 				DefaultTableModel tableModel = null;
 				int index = search_type.getSelectedIndex();
+				if(dl.getDisplay_mode() == 0) {
+					lang = AppHandler.getTextLanguages();
+					
+				}else {
+					lang = AppHandler.getBinLanguages();
+				}
+				tableModel = new DefaultTableModel(SearchFilter(lang, search_text, index), dl.getColumns());
+				dl.getDataTable().setModel(tableModel);
 				tableModel = new DefaultTableModel(SearchFilter(lang, search_text, index), dl.getColumns());
 				dl.getDataTable().setModel(tableModel);
 				}

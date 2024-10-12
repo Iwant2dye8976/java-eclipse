@@ -3,6 +3,8 @@ package swingapp;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
 import java.util.ArrayList;
 
 import javax.swing.*;
@@ -51,29 +53,6 @@ public class AddLanguage {
 			}
 		});
 		
-		add_btn.addActionListener(new ActionListener() {
-
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				String[] data = getLanguageInfo();
-				if(dl.getDisplay_mode() == 0) { //Display moede = 0: Hiển thị file text | Display mode = 1: Hiển thị file nhị phân 
-					AppHandler.SaveToText(data[0], data[1], Integer.parseInt(data[2]), data[3], data[4].toString(), data[5]);
-				}
-				else {
-					ArrayList<Language> l = AppHandler.getDataTable(dl.getDataTable());
-					if(data[5].contains("Java")) {
-						l.add(new JavaLanguage(Integer.parseInt(data[2]), data[1], data[0], data[3], data[4].toString()));
-					}
-					else {
-						l.add(new PythonLanguage(Integer.parseInt(data[2]), data[1], data[0], data[3], Boolean.parseBoolean(data[4])));
-//						System.out.println(data[4]);
-					}
-					AppHandler.SaveBinLanguage(l);
-				}
-				JOptionPane.showMessageDialog(null, "Thêm thành công!", null, JOptionPane.INFORMATION_MESSAGE);
-				clearTextField();
-			}
-		});
 
 		// Thiết lập GridBagConstraints cho từng thành phần
 		gbc.anchor = GridBagConstraints.NORTHWEST; // Căn lên góc trên bên trái
@@ -131,8 +110,48 @@ public class AddLanguage {
 		gbc.gridwidth = 2;
 		gbc.anchor = GridBagConstraints.CENTER;
 		add_panel.add(add_btn, gbc);
+		
+		addAction(dl);
 
 	}
+	
+	public void addAction(DisplayLanguages dl) {
+		add_btn.addActionListener(new ActionListener() {
+
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				String[] data = getLanguageInfo();
+				if(dl.getDisplay_mode() == 0) { //Display moede = 0: Hiển thị file text | Display mode = 1: Hiển thị file nhị phân 
+					AppHandler.SaveToText(data[0], data[1], Integer.parseInt(data[2]), data[3], data[4].toString(), data[5]);
+				}
+				else {
+					ArrayList<Language> l = AppHandler.getDataTable(dl.getDataTable());
+					if(data[5].contains("Java")) {
+						l.add(new JavaLanguage(Integer.parseInt(data[2]), data[1], data[0], data[3], data[4].toString()));
+					}
+					else {
+						l.add(new PythonLanguage(Integer.parseInt(data[2]), data[1], data[0], data[3], Boolean.parseBoolean(data[4])));
+//						System.out.println(data[4]);
+					}
+					AppHandler.SaveBinLanguage(l);
+				}
+				JOptionPane.showMessageDialog(null, "Thêm thành công!", null, JOptionPane.INFORMATION_MESSAGE);
+				clearTextField();
+			}
+		});
+		
+		InputMap inputMap = add_btn.getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW);
+		ActionMap actionMap = add_btn.getActionMap();
+		inputMap.put(KeyStroke.getKeyStroke("ENTER"), "pressedEnter");
+		actionMap.put("pressedEnter", new AbstractAction() {
+			
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				add_btn.doClick();
+			}
+		});
+	}
+	
 
 	public Boolean convert2Boolean(String isDynamicTyped) {
 		return isDynamicTyped.toLowerCase().contains("yes") ? true : false;
