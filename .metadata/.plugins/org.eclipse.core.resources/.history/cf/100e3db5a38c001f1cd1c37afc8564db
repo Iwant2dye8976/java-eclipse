@@ -1,0 +1,99 @@
+package swingapp;
+
+import java.awt.Component;
+import java.awt.Font;
+import java.util.ArrayList;
+
+import javax.swing.*;
+import javax.swing.event.ListSelectionEvent;
+import javax.swing.event.ListSelectionListener;
+import javax.swing.table.*;
+
+public class DisplayLanguageFromDataBase {
+	private int index;
+	private int[] indexes;
+	private JLabel title, loadMode;
+	private JScrollPane data_panel;
+	private JPanel f_panel;
+	private JTable data_table;
+	private DefaultTableModel tableModel;
+	private ArrayList<Language> dt;
+	private String[][] data;
+	private String[] columns = { "ID", "Tên gọi", "Tác giả", "Năm phát hành", "Ứng dụng", "Ghi chú" };
+
+	public DisplayLanguageFromDataBase() {
+		try {
+			dt = AppHandler.getLanguageDataBase("JavaLanguage");
+			data = AppHandler.ArrayList2Array(dt);
+		} catch (Exception e) {
+			JOptionPane.showMessageDialog(null, "Xảy ra lỗi khi load ngôn ngữ!", "Lỗi", JOptionPane.ERROR_MESSAGE);
+			e.printStackTrace();
+		}
+		data_table = new JTable(data, columns);
+		data_table.getTableHeader().setReorderingAllowed(false);
+		data_table.getSelectionModel().addListSelectionListener(new ListSelectionListener() {
+
+			@Override
+			public void valueChanged(ListSelectionEvent e) {
+				{
+					if (!e.getValueIsAdjusting()) {
+						if (data_table.getSelectedRowCount() < 2)
+							index = data_table.getSelectedRow();
+						else {
+							indexes = data_table.getSelectedRows();
+						}
+					}
+				}
+			}
+		});
+
+		// Tạo JScrollPane chứa bảng
+		data_panel = new JScrollPane(data_table);
+		JLabel label = new JLabel("Danh sách ngôn ngữ", JLabel.CENTER);
+		label.setFont(new Font("Arial", Font.BOLD, 24));
+		label.setAlignmentX(Component.CENTER_ALIGNMENT);
+		// Tạo JPanel và đặt Layout theo BoxLayout
+		f_panel = new JPanel();
+		f_panel.setLayout(new BoxLayout(f_panel, BoxLayout.Y_AXIS));
+		
+		f_panel.add(label);
+		f_panel.add(data_panel);
+	}
+	
+	
+	public void updateFromDataBase() {
+		try {
+			dt = AppHandler.getLanguageDataBase("JavaLanguage");
+			data = AppHandler.ArrayList2Array(dt);
+			tableModel = new DefaultTableModel(data, columns);
+			data_table.setModel(tableModel);
+		} catch (Exception e) {
+			JOptionPane.showMessageDialog(null, "Xảy ra lỗi khi load ngôn ngữ từ CSDL!", "Lỗi", JOptionPane.ERROR_MESSAGE);
+			e.printStackTrace();
+		}
+	}
+
+	public int getSelectedIndex() {
+		return index;
+	}
+
+	public int[] getSelectedIndexes() {
+		return indexes;
+	}
+
+	public JTable getDataTable() {
+		return data_table;
+	}
+
+	public JScrollPane getDataPanel() {
+		return data_panel;
+	}
+
+	public JPanel getFPanel() {
+		return f_panel;
+	}
+
+	public String[] getColumns() {
+		return columns;
+	}
+}

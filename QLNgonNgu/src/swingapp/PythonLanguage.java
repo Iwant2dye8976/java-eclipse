@@ -10,8 +10,8 @@ public class PythonLanguage extends Language{
 	public PythonLanguage() {
 	}
 
-	public PythonLanguage(int release_year, String author, String name, String usage, boolean isDynamicTyped) {
-		super(release_year, author, name, usage); // Constructor cua lop cha
+	public PythonLanguage(int id, int release_year, String author, String name, String usage, boolean isDynamicTyped) {
+		super(id, release_year, author, name, usage); // Constructor cua lop cha
 		this.isDynamicTyped = isDynamicTyped;
 	}
 

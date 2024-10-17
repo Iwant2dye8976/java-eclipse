@@ -2,6 +2,7 @@ package swingapp;
 
 import java.awt.event.*;
 import java.io.IOException;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.awt.*;
 import javax.swing.*;
@@ -9,7 +10,7 @@ import javax.swing.table.DefaultTableModel;
 
 public class Popup_menu {
 	private JPopupMenu popup_menu;
-	private JMenuItem save2bin, save2text, loadAsbin, loadAstext;
+	private JMenuItem save2bin, save2text, loadAsbin, loadAstext, loadJavaLanguage, loadPythonLanguage;
 
 	public Popup_menu(DisplayLanguages dl) {
 		popup_menu = new JPopupMenu();
@@ -81,6 +82,48 @@ public class Popup_menu {
 					JOptionPane.showMessageDialog(null, "Xảy ra lỗi!", null, JOptionPane.ERROR_MESSAGE);
 				}
 				
+			}
+		});
+	}
+	
+	
+	public Popup_menu(DisplayLanguageFromDataBase dl_database) {
+		popup_menu = new JPopupMenu();
+		loadJavaLanguage = new JMenuItem("Xem ngôn ngữ Java");
+		loadPythonLanguage = new JMenuItem("Xe ngôn ngữ Python");
+		
+		popup_menu.add(loadJavaLanguage);
+		popup_menu.add(loadPythonLanguage);
+
+		menuItemHandler(dl_database.getDataTable(), dl_database);
+	}
+
+	public void menuItemHandler(JTable data_table, DisplayLanguageFromDataBase dl_database) {
+		loadJavaLanguage.addActionListener(new ActionListener() {
+
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				try {
+					dl_database.updateFromDataBase("JavaLanguage");
+					JOptionPane.showMessageDialog(null, "Tải thành công!", null, JOptionPane.INFORMATION_MESSAGE);
+				}
+				catch(Exception er) {
+					JOptionPane.showMessageDialog(null, "Xảy ra lỗi!", null, JOptionPane.ERROR_MESSAGE);
+				}
+				
+			}
+		});
+		loadPythonLanguage.addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				try {
+					dl_database.updateFromDataBase("PythonLanguage");
+					JOptionPane.showMessageDialog(null, "Tải thành công!", null, JOptionPane.INFORMATION_MESSAGE);
+				}
+				catch(Exception er) {
+					JOptionPane.showMessageDialog(null, "Xảy ra lỗi!", null, JOptionPane.ERROR_MESSAGE);
+				}
 			}
 		});
 	}

@@ -8,10 +8,7 @@ import java.util.ArrayList;
 
 public class DeleteLanguage extends JButton {
 	private JButton delete_btn;
-
-	public DeleteLanguage() {
-		delete_btn = new JButton("Xóa");
-	}
+	private JPanel del_panel;
 
 	public DeleteLanguage(DisplayLanguages dl) {
 		delete_btn = new JButton("Xóa");
@@ -37,7 +34,7 @@ public class DeleteLanguage extends JButton {
 					if (rowCount < 2) {
 						lang.remove(dl.getSelectedIndex());
 					} else {
-						System.out.println(lang.size());
+//						System.out.println(lang.size());
 						for (int i = removelist.length - 1; i >= 0; i--) {
 							lang.remove(removelist[i]);
 						}
@@ -59,7 +56,38 @@ public class DeleteLanguage extends JButton {
 		});
 
 	}
-
+	
+	public DeleteLanguage(DisplayLanguageFromDataBase dl_database) {
+		createDeleteButton();
+	}
+	
+	public void createDeleteButton() {
+		GridBagLayout gridbagLayout =  new GridBagLayout();
+		del_panel = new JPanel(gridbagLayout);
+		GridBagConstraints gbc = new GridBagConstraints();
+		
+		gbc.gridx = 0;
+		gbc.gridy = 0;
+		gbc.anchor = GridBagConstraints.CENTER;
+		delete_btn = new JButton("Xóa");
+		
+		del_panel.add(delete_btn, gbc);
+	}
+	
+	public void addActionListener(DisplayLanguageFromDataBase dl_database) {
+		delete_btn.addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				AppHandler.deleteLanguageDatabase(dl_database.getDisplay_mode(), dl_database.getSelectedIds_());
+			}
+		});
+	}
+	
+	public JPanel getDel_panel() {
+		return del_panel;
+	}
+	
 	public JButton getDelete_btn() {
 		return delete_btn;
 	}

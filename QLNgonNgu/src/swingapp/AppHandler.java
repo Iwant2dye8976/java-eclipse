@@ -1,6 +1,9 @@
 package swingapp;
 
 import java.io.*;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.*;
 
 import javax.swing.*;
@@ -27,7 +30,8 @@ public class AppHandler {
 		}
 	}
 
-	public static void SaveToText(String name, String author, int r_year, String usage, String other, String type) {
+	public static void SaveToText(int id, String name, String author, int r_year, String usage, String other,
+			String type) {
 		File fi = new File("Language.txt");
 		ArrayList<Language> lang = new ArrayList<>();
 		try {
@@ -36,11 +40,11 @@ public class AppHandler {
 			}
 			try (PrintWriter pw = new PrintWriter(fi)) {
 				if (type.contains("Java")) {
-					JavaLanguage java = new JavaLanguage(r_year, author, name, usage, other);
+					JavaLanguage java = new JavaLanguage(id, r_year, author, name, usage, other);
 					lang.add(java);
 				} else {
 					Boolean isDynamicTyped = Boolean.parseBoolean(other);
-					PythonLanguage python = new PythonLanguage(r_year, author, name, usage, isDynamicTyped);
+					PythonLanguage python = new PythonLanguage(id, r_year, author, name, usage, isDynamicTyped);
 					lang.add(python);
 				}
 				for (int i = 0; i < lang.size(); i++) {
@@ -69,26 +73,28 @@ public class AppHandler {
 		ArrayList<Language> programmingLanguages = new ArrayList<>();
 		FileReader fr = new FileReader("Language.txt");
 		BufferedReader br = new BufferedReader(fr);
-		int release_year;
+		int id, release_year;
 		String name, author, usage;
 		String line;
 		while (br.ready()) {
 			line = br.readLine();
 			String[] sp = line.split(",");
 			if (sp[5].contains("Java")) {
-				release_year = Integer.parseInt(sp[2]);
-				name = sp[0];
-				author = sp[1];
-				usage = sp[3];
-				String jdkVersion = sp[4];
-				programmingLanguages.add(new JavaLanguage(release_year, author, name, usage, jdkVersion));
+				release_year = Integer.parseInt(sp[3]);
+				id = Integer.parseInt(sp[0]);
+				name = sp[1];
+				author = sp[2];
+				usage = sp[4];
+				String jdkVersion = sp[5];
+				programmingLanguages.add(new JavaLanguage(id, release_year, author, name, usage, jdkVersion));
 			} else {
-				release_year = Integer.parseInt(sp[2]);
-				name = sp[0];
-				author = sp[1];
-				usage = sp[3];
-				Boolean isDynamictyped = Boolean.parseBoolean(sp[4]);
-				programmingLanguages.add(new PythonLanguage(release_year, author, name, usage, isDynamictyped));
+				release_year = Integer.parseInt(sp[3]);
+				id = Integer.parseInt(sp[0]);
+				name = sp[1];
+				author = sp[2];
+				usage = sp[4];
+				Boolean isDynamictyped = Boolean.parseBoolean(sp[5]);
+				programmingLanguages.add(new PythonLanguage(id, release_year, author, name, usage, isDynamictyped));
 			}
 		}
 		return programmingLanguages;
@@ -96,14 +102,14 @@ public class AppHandler {
 
 	public static String[][] ArrayList2Array(ArrayList<Language> lg) {
 		int rows = lg.size();
-		int columns = 5;
+		int columns = 6;
 		String[][] data = new String[rows][columns];
 		for (int i = 0; i < rows; i++) {
 			String[] details = lg.get(i).toString().split(",");
-			if (details[5].contains("Java")) {
-				data[i][4] = "JDK Version: " + details[4];
+			if (details[6].contains("Java")) {
+				data[i][5] = "JDK Version: " + details[5];
 			} else {
-				data[i][4] = "Is Dynamic Typed: " + (Boolean.parseBoolean(details[4].toString()) ? "Yes" : "No");
+				data[i][5] = "Is Dynamic Typed: " + (Boolean.parseBoolean(details[5].toString()) ? "Yes" : "No");
 			}
 			for (int j = 0; j < columns - 1; j++) {
 				data[i][j] = details[j];
@@ -153,15 +159,67 @@ public class AppHandler {
 				} else {
 					String[] sp = data.split(",");
 					if (check == 0) {
-						langs.add(new JavaLanguage(Integer.parseInt(sp[2]), sp[1], sp[0], sp[3], sp[4].toString()));
+						langs.add(new JavaLanguage(Integer.parseInt(sp[0]), Integer.parseInt(sp[3]), sp[2], sp[1],
+								sp[3], sp[5].toString()));
 					} else {
-						langs.add(new PythonLanguage(Integer.parseInt(sp[2]), sp[1], sp[0], sp[3],
-								sp[4].equalsIgnoreCase("yes")));
+						langs.add(new PythonLanguage(Integer.parseInt(sp[0]), Integer.parseInt(sp[3]), sp[2], sp[1],
+								sp[4], sp[5].equalsIgnoreCase("yes")));
 					}
 				}
 			}
 		}
 		return langs;
+	}
+
+	public static ArrayList<Language> getLanguageDataBase(String tableName) {
+		ArrayList<Language> lang = new ArrayList<>();
+		try {
+			ConnectDB cdb = new ConnectDB();
+			ResultSet rs = cdb.getLanguage(tableName);
+			while (rs.next()) {
+				if (tableName.toLowerCase().contains("java")) {
+					lang.add(new JavaLanguage(rs.getInt(1), rs.getInt(3), rs.getString(4), rs.getString(2),
+							rs.getString(5), rs.getString(6)));
+				} else {
+					lang.add(new PythonLanguage(rs.getInt(1), rs.getInt(3), rs.getString(4), rs.getString(2),
+							rs.getString(5), rs.getBoolean(6)));
+				}
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return lang;
+	}
+
+	public static void addLanguage2DB(int ID, String name, int r_year, String author, String usage, String other,
+			String type) {
+		try {
+			ConnectDB cdb = new ConnectDB();
+			cdb.addLanguage(ID, name, r_year, author, usage, other, type);
+			JOptionPane.showMessageDialog(null, "Thêm thành công vào CSDL!", null, JOptionPane.INFORMATION_MESSAGE);
+		} catch (SQLException e) {
+			JOptionPane.showMessageDialog(null, "Xảy ra lỗi khi thêm ngôn ngữ!", "Lỗi", JOptionPane.ERROR_MESSAGE);
+			e.printStackTrace();
+		}
+	}
+
+	public static void deleteLanguageDatabase(int display_mode, int[] index) {
+		try {
+			ConnectDB cdb = new ConnectDB();
+			if (display_mode == 0) {
+				for (int id : index) {
+					cdb.deleteLaguage("JavaLanguage", id);
+				}
+			} else {
+				for (int id : index) {
+					cdb.deleteLaguage("PythonLanguage", id);
+				}
+			}
+			JOptionPane.showMessageDialog(null, "Xóa thành công!", null, JOptionPane.INFORMATION_MESSAGE);
+		} catch (Exception e) {
+			JOptionPane.showMessageDialog(null, "Xảy ra lỗi khi xóa ngôn ngữ!", "Lỗi", JOptionPane.ERROR_MESSAGE);
+			e.printStackTrace();
+		}
 	}
 
 }

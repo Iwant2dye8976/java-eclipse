@@ -22,7 +22,7 @@ public class DisplayLanguages {
 	private DefaultTableModel tableModel;
 	private ArrayList<Language> dt;
 	private String[][] data;
-	private String[] columns = { "Tên gọi", "Tác giả", "Năm phát hành", "Ứng dụng", "Ghi chú" };
+	private String[] columns = {"ID", "Tên gọi", "Tác giả", "Năm phát hành", "Ứng dụng", "Ghi chú" };
 
 //	public DisplayLanguages() {};
 

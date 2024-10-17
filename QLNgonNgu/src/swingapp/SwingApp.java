@@ -66,12 +66,18 @@ public class SwingApp {
 		display_panel.add(dlt_l.getDelete_btn(), gbc);
 
 		contentPanel.add(display_panel, "Data");
+		
+		DisplayLanguageFromDataBase dl_database = new DisplayLanguageFromDataBase();
+		contentPanel.add(dl_database.getFPanel(), "Database_Data");
 
 		// Panel thêm ngôn ngữ
 		AddLanguage al = new AddLanguage(dl);
 		contentPanel.add(al.getAddPanel(), "Add_Language");
 
-		MenuBar menuBar = new MenuBar(cardLayout, contentPanel, dl);
+		AddLanguage2DB al2_db = new AddLanguage2DB(dl);
+		contentPanel.add(al2_db.getAddPanel(), "Add_Language_DB");
+
+		MenuBar menuBar = new MenuBar(cardLayout, contentPanel, dl, dl_database);
 		frame.setJMenuBar(menuBar.getMenuBar());
 
 		Image icon = Toolkit.getDefaultToolkit().getImage("BoxIcon.png");

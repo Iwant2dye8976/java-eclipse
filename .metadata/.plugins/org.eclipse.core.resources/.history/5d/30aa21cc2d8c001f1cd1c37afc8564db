@@ -1,0 +1,14 @@
+package swingapp;
+
+import java.sql.SQLException;
+
+public class ConnectDB {
+	public ConnectDB() {
+		try {
+			
+		}
+		catch(SQLException e) {
+			e.printStackTrace();
+		}
+	}
+}

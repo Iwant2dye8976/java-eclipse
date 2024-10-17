@@ -1,6 +1,4 @@
-1,1,1,1,1,Java
-Java,adad,11212,ad12,1,Java
-Python,bca,1991,ádaaaaa,false,Python
-Java,thanh,1991,quản lý ngôn ngữ,22,Java
-2,2,2,2,2,Java
-2,2,2,2,2,Java
+0,1,1,1,1,false,Python
+1,Java,adad,11212,ad12,false,Python
+2,Python,bca,1991,ádaaaaa,false,Python
+3,Java,thanh,1991,quản lý ngôn ngữ,false,Python

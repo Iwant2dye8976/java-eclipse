@@ -5,13 +5,14 @@ import java.util.*;
 
 public class Language implements ProgrammingLanguage, Serializable {
 	private static final long serialVersionUID = 1L;
-	private int release_year;
+	private int release_year, id;
 	private String author, name, usage;
 
 	public Language() {
 	}
 
-	public Language(int release_year_, String author_, String name_, String usage_) {
+	public Language(int id_, int release_year_, String author_, String name_, String usage_) {
+		id = id_;
 		release_year = release_year_;
 		author = author_;
 		name = name_;
@@ -53,6 +54,10 @@ public class Language implements ProgrammingLanguage, Serializable {
 
 	public void setUsages(String usages_) {
 		this.usage = usages_;
+	}
+	
+	public int getId() {
+		return id;
 	}
 
 	@Override
@@ -101,7 +106,7 @@ public class Language implements ProgrammingLanguage, Serializable {
 
 	@Override
 	public String toString() {
-		return getName() + "," + getAuthor() + "," + getReleaseYear() + "," + getUsage();
+		return getId() + "," + getName() + "," + getAuthor() + "," + getReleaseYear() + "," + getUsage();
 	}
 
 }

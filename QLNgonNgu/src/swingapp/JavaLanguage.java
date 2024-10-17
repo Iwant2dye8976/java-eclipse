@@ -11,8 +11,8 @@ public class JavaLanguage extends Language{
 		super();
 	}
 
-	public JavaLanguage(int release_year, String author, String name, String usage, String jdkVersion) {
-		super(release_year, author, name, usage); // Gọi constructor của lớp cha
+	public JavaLanguage(int id, int release_year, String author, String name, String usage, String jdkVersion) {
+		super(id, release_year, author, name, usage); // Gọi constructor của lớp cha
 		this.jdkVersion = jdkVersion;
 	}
 
