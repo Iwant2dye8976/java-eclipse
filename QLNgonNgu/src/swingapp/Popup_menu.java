@@ -90,7 +90,7 @@ public class Popup_menu {
 	public Popup_menu(DisplayLanguageFromDataBase dl_database) {
 		popup_menu = new JPopupMenu();
 		loadJavaLanguage = new JMenuItem("Xem ngôn ngữ Java");
-		loadPythonLanguage = new JMenuItem("Xe ngôn ngữ Python");
+		loadPythonLanguage = new JMenuItem("Xem ngôn ngữ Python");
 		
 		popup_menu.add(loadJavaLanguage);
 		popup_menu.add(loadPythonLanguage);

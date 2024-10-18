@@ -15,7 +15,7 @@ public class DisplayLanguages {
 	private int display_mode = 0;
 	private int index;
 	private int[] indexes;
-	private JLabel title, loadMode;
+	private JLabel loadMode;
 	private JScrollPane data_panel;
 	private JPanel f_panel;
 	private JTable data_table;

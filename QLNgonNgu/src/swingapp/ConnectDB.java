@@ -44,7 +44,8 @@ public class ConnectDB {
 		return resultSet;
 	}
 
-	public void addLanguage(int ID, String name, int r_year, String author, String usage, String other, String type) throws SQLException {
+	public void addLanguage(int ID, String name, int r_year, String author, String usage, String other, String type)
+			throws SQLException {
 		String tableName;
 		if (type.toLowerCase().contains("python")) {
 			tableName = "PythonLanguage";
@@ -73,14 +74,22 @@ public class ConnectDB {
 		preparedStatement.executeUpdate();
 	}
 
-	public void deleteLaguage(String tableName, int id) {
-		try {
-			String sql = "DELETE FROM " + tableName + " WHERE ID = " + id;
-			preparedStatement = connectDB().prepareStatement(sql);
-			resultSet = preparedStatement.executeQuery();
-		} catch (SQLException e) {
-			e.printStackTrace();
+	public void deleteLaguage(String tableName, int id) throws SQLException {
+		String sql = "DELETE FROM " + tableName + " WHERE ID = " + id;
+		preparedStatement = connectDB().prepareStatement(sql);
+		preparedStatement.executeUpdate();
+	}
+
+	public ResultSet searchLanguage(String tableName, String column, String toFind) throws SQLException {
+		String sql = "SELECT * FROM " + tableName + " WHERE " + column + " = ?";
+		preparedStatement = connectDB().prepareStatement(sql);
+		if(column.contains("Year")) {
+			preparedStatement.setInt(1, Integer.parseInt(toFind));
 		}
+		else {preparedStatement.setString(1, toFind);}
+		
+		resultSet = preparedStatement.executeQuery();
+		return resultSet;
 	}
 
 //	public static void main(String[] args) {

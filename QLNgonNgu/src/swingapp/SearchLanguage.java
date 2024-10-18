@@ -69,34 +69,65 @@ public class SearchLanguage {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				try {
-				ArrayList<Language> lang = null;
-				String search_text = search_box.getText().toLowerCase().trim();
-				DefaultTableModel tableModel = null;
-				int index = search_type.getSelectedIndex();
-				if(dl.getDisplay_mode() == 0) {
-					lang = AppHandler.getTextLanguages();
-					
-				}else {
-					lang = AppHandler.getBinLanguages();
-				}
-				tableModel = new DefaultTableModel(SearchFilter(lang, search_text, index), dl.getColumns());
-				dl.getDataTable().setModel(tableModel);
-				tableModel = new DefaultTableModel(SearchFilter(lang, search_text, index), dl.getColumns());
-				dl.getDataTable().setModel(tableModel);
-				}
-				catch(IOException | ClassNotFoundException err) {
-					JOptionPane.showMessageDialog(null, "Xảy ra lỗi khi tải ngôn ngữ!", "Lỗi", JOptionPane.ERROR_MESSAGE);
+					ArrayList<Language> lang = null;
+					String search_text = search_box.getText().toLowerCase().trim();
+					DefaultTableModel tableModel = null;
+					int index = search_type.getSelectedIndex();
+					if (dl.getDisplay_mode() == 0) {
+						lang = AppHandler.getTextLanguages();
+
+					} else {
+						lang = AppHandler.getBinLanguages();
+					}
+					tableModel = new DefaultTableModel(SearchFilter(lang, search_text, index), dl.getColumns());
+					dl.getDataTable().setModel(tableModel);
+					tableModel = new DefaultTableModel(SearchFilter(lang, search_text, index), dl.getColumns());
+					dl.getDataTable().setModel(tableModel);
+				} catch (IOException | ClassNotFoundException err) {
+					JOptionPane.showMessageDialog(null, "Xảy ra lỗi khi tải ngôn ngữ!", "Lỗi",
+							JOptionPane.ERROR_MESSAGE);
 					err.getStackTrace();
 				}
 			}
 		});
 	}
-	
-	
+
 	public SearchLanguage(DisplayLanguageFromDataBase dl_database) {
 		createSearch();
+		addActionListenerDB(dl_database);
 	}
- 
+
+	public void addActionListenerDB(DisplayLanguageFromDataBase dl_database) {
+		search_btn.addActionListener(new ActionListener() {
+
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				String tableName = dl_database.getDisplay_mode() == 0 ? "JavaLanguage" : "PythonLanguage";
+				int index = search_type.getSelectedIndex();
+				String column = "";
+				switch (index) {
+				case 0:
+					column = "Name";
+					break;
+				case 1:
+					column = "Author";
+					break;
+				case 2:
+					column = "ReleaseYear";
+					break;
+				case 3:
+					column = "Usage";
+					break;
+				}
+				String toFind = search_box.getText().trim();
+				if (!toFind.isEmpty()) {
+					dl_database.updateSearch(tableName, AppHandler.searchLanguageDatabase(tableName, column, toFind));
+				} else {
+					dl_database.updateFromDataBase(tableName);
+				}
+			}
+		});
+	}
 
 	public String getSelectedTypes() {
 		return search_type.getSelectedItem().toString();

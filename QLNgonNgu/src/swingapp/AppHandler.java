@@ -203,15 +203,15 @@ public class AppHandler {
 		}
 	}
 
-	public static void deleteLanguageDatabase(int display_mode, int[] index) {
+	public static void deleteLanguageDatabase(int display_mode, int[] IDs) {
 		try {
 			ConnectDB cdb = new ConnectDB();
 			if (display_mode == 0) {
-				for (int id : index) {
+				for (int id : IDs) {
 					cdb.deleteLaguage("JavaLanguage", id);
 				}
 			} else {
-				for (int id : index) {
+				for (int id : IDs) {
 					cdb.deleteLaguage("PythonLanguage", id);
 				}
 			}
@@ -221,5 +221,24 @@ public class AppHandler {
 			e.printStackTrace();
 		}
 	}
-
+	
+	public static ArrayList<Language> searchLanguageDatabase(String tableName ,String column, String toFind) {
+		ArrayList<Language> lang = new ArrayList<>();
+		try {
+			ConnectDB cdb = new ConnectDB();
+			ResultSet rs = cdb.searchLanguage(tableName, column, toFind);
+			while (rs.next()) {
+				if (tableName.toLowerCase().contains("java")) {
+					lang.add(new JavaLanguage(rs.getInt(1), rs.getInt(3), rs.getString(4), rs.getString(2),
+							rs.getString(5), rs.getString(6)));
+				} else {
+					lang.add(new PythonLanguage(rs.getInt(1), rs.getInt(3), rs.getString(4), rs.getString(2),
+							rs.getString(5), rs.getBoolean(6)));
+				}
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return lang;
+	}
 }

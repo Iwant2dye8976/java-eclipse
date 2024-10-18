@@ -14,6 +14,7 @@ import javax.swing.table.*;
 public class DisplayLanguageFromDataBase {
 	private int display_mode;
 	private int[] ids_;
+	private JLabel label;
 	private JScrollPane data_panel;
 	private JPanel f_panel;
 	private JTable data_table;
@@ -35,7 +36,7 @@ public class DisplayLanguageFromDataBase {
 
 		// Tạo JScrollPane chứa bảng
 		data_panel = new JScrollPane(data_table);
-		JLabel label = new JLabel("Danh sách ngôn ngữ", JLabel.CENTER);
+		label = new JLabel("Danh sách ngôn ngữ", JLabel.CENTER);
 		label.setFont(new Font("Arial", Font.BOLD, 24));
 		label.setAlignmentX(Component.CENTER_ALIGNMENT);
 		// Tạo JPanel và đặt Layout theo BoxLayout
@@ -61,6 +62,34 @@ public class DisplayLanguageFromDataBase {
 			} else
 				setDisplay_mode(1);
 			dt = AppHandler.getLanguageDataBase(tableName);
+			data = AppHandler.ArrayList2Array(dt);
+//			for(int i = 0;i<data.length;i++) {
+//				for(int j = 0;j<6;j++) {
+//					System.out.println("Data[" + i + "][" + j+"]: " +data[i][j]);
+//				}
+//				System.out.println();
+//			}
+			tableModel = new DefaultTableModel(data, columns);
+			data_table.setModel(tableModel);
+			if (tableName.contains("Java")) {
+				label.setText("Danh sách ngôn ngữ Java");
+			} else {
+				label.setText("Danh sách ngôn ngữ Python");
+			}
+
+		} catch (Exception e) {
+			JOptionPane.showMessageDialog(null, "Xảy ra lỗi khi load ngôn ngữ từ CSDL!", "Lỗi",
+					JOptionPane.ERROR_MESSAGE);
+			e.printStackTrace();
+		}
+	}
+
+	public void updateSearch(String tableName, ArrayList<Language> dt) {
+		try {
+			if (tableName.toLowerCase().contains("java")) {
+				setDisplay_mode(0);
+			} else
+				setDisplay_mode(1);
 			data = AppHandler.ArrayList2Array(dt);
 //			for(int i = 0;i<data.length;i++) {
 //				for(int j = 0;j<6;j++) {
@@ -130,6 +159,14 @@ public class DisplayLanguageFromDataBase {
 				}
 			}
 		});
+	}
+
+	public int[] getID(int[] ids_) {
+		int[] IDs = new int[ids_.length];
+		for (int i = 0; i < ids_.length; i++) {
+			IDs[i] = Integer.parseInt(data_table.getValueAt(ids_[i], 0).toString());
+		}
+		return IDs;
 	}
 
 	public void setDisplay_mode(int display_mode) {

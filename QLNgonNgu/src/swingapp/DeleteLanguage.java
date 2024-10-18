@@ -19,7 +19,8 @@ public class DeleteLanguage extends JButton {
 				try {
 					int rowCount = dl.getDataTable().getSelectedRowCount();
 					if (rowCount == 0) {
-						JOptionPane.showMessageDialog(null, "Vui lòng chọn ngôn ngữ muốn xóa!", null, JOptionPane.WARNING_MESSAGE);
+						JOptionPane.showMessageDialog(null, "Vui lòng chọn ngôn ngữ muốn xóa!", null,
+								JOptionPane.WARNING_MESSAGE);
 						return; // Thoát ra nếu chưa có dữ liệu được chọn
 					}
 
@@ -56,38 +57,47 @@ public class DeleteLanguage extends JButton {
 		});
 
 	}
-	
+
 	public DeleteLanguage(DisplayLanguageFromDataBase dl_database) {
 		createDeleteButton();
+		addActionListener(dl_database);
 	}
-	
+
 	public void createDeleteButton() {
-		GridBagLayout gridbagLayout =  new GridBagLayout();
+		GridBagLayout gridbagLayout = new GridBagLayout();
 		del_panel = new JPanel(gridbagLayout);
 		GridBagConstraints gbc = new GridBagConstraints();
-		
+
 		gbc.gridx = 0;
 		gbc.gridy = 0;
 		gbc.anchor = GridBagConstraints.CENTER;
 		delete_btn = new JButton("Xóa");
-		
+
 		del_panel.add(delete_btn, gbc);
 	}
-	
+
 	public void addActionListener(DisplayLanguageFromDataBase dl_database) {
 		delete_btn.addActionListener(new ActionListener() {
-			
+
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				AppHandler.deleteLanguageDatabase(dl_database.getDisplay_mode(), dl_database.getSelectedIds_());
+				if (dl_database.getDataTable().getSelectedRowCount() == 0) {
+					JOptionPane.showMessageDialog(null, "Vui lòng chọn ngôn ngữ muốn xóa!", null,
+							JOptionPane.WARNING_MESSAGE);
+					return;
+				} else {
+					AppHandler.deleteLanguageDatabase(dl_database.getDisplay_mode(), dl_database.getID(dl_database.getSelectedIds_()));
+					dl_database
+							.updateFromDataBase(dl_database.getDisplay_mode() == 0 ? "JavaLanguage" : "PythonLanguage");
+				}
 			}
 		});
 	}
-	
+
 	public JPanel getDel_panel() {
 		return del_panel;
 	}
-	
+
 	public JButton getDelete_btn() {
 		return delete_btn;
 	}
