@@ -9,6 +9,8 @@ import java.util.ArrayList;
 import javax.swing.*;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
+import javax.swing.event.TableModelEvent;
+import javax.swing.event.TableModelListener;
 import javax.swing.table.*;
 
 public class DisplayLanguageFromDataBase {
@@ -70,6 +72,7 @@ public class DisplayLanguageFromDataBase {
 //				System.out.println();
 //			}
 			tableModel = new DefaultTableModel(data, columns);
+			updateChanged();
 			data_table.setModel(tableModel);
 			if (tableName.contains("Java")) {
 				label.setText("Danh sách ngôn ngữ Java");
@@ -98,12 +101,40 @@ public class DisplayLanguageFromDataBase {
 //				System.out.println();
 //			}
 			tableModel = new DefaultTableModel(data, columns);
+			updateChanged();
 			data_table.setModel(tableModel);
 		} catch (Exception e) {
 			JOptionPane.showMessageDialog(null, "Xảy ra lỗi khi load ngôn ngữ từ CSDL!", "Lỗi",
 					JOptionPane.ERROR_MESSAGE);
 			e.printStackTrace();
 		}
+	}
+	
+	public void updateChanged() {
+		tableModel.addTableModelListener(new TableModelListener() {
+			
+			@Override
+			public void tableChanged(TableModelEvent e) {
+				if (e.getType() == TableModelEvent.UPDATE) {
+					int ID = Integer.parseInt(data_table.getValueAt(data_table.getSelectedRow(), 0).toString());
+					String name = (String) data_table.getValueAt(data_table.getSelectedRow(), 1);
+					String author = (String) data_table.getValueAt(data_table.getSelectedRow(), 2);
+					int r_year = Integer.parseInt(data_table.getValueAt(data_table.getSelectedRow(), 3).toString());
+					String usage = (String) data_table.getValueAt(data_table.getSelectedRow(), 4);
+					String other = (String) data_table.getValueAt(data_table.getSelectedRow(), 5);
+					if(getDisplay_mode() == 0) {
+						other = other.replaceAll("JDK Version: ", "");
+						AppHandler.updateChange2DB("JavaLanguage", ID, name, r_year, author, usage, other);
+						setDisplay_mode(0);
+					}
+					else {
+						other = other.replaceAll("Is Dynamic Typed: ", "");
+						AppHandler.updateChange2DB("PythonLanguage", ID, name, r_year, author, usage, other);
+						setDisplay_mode(1);
+					}
+                }
+			}
+		});
 	}
 
 	private void AddmouseListener() {

@@ -83,13 +83,50 @@ public class ConnectDB {
 	public ResultSet searchLanguage(String tableName, String column, String toFind) throws SQLException {
 		String sql = "SELECT * FROM " + tableName + " WHERE " + column + " = ?";
 		preparedStatement = connectDB().prepareStatement(sql);
-		if(column.contains("Year")) {
+		if (column.contains("Year")) {
 			preparedStatement.setInt(1, Integer.parseInt(toFind));
+		} else {
+			preparedStatement.setString(1, toFind);
 		}
-		else {preparedStatement.setString(1, toFind);}
-		
+
 		resultSet = preparedStatement.executeQuery();
 		return resultSet;
+	}
+
+	public void updateLanguage(String tableName, int ID, String name, int r_year, String author, String usage,
+			String other) {
+		try {
+			String otherC = "";
+			if (tableName.contains("Java")) {
+				otherC = "JdkVersion";
+				String sql = "UPDATE " + tableName + " SET Name = ?, ReleaseYear = ?, Author = ?, Usage = ?, " + otherC
+						+ " = ? WHERE ID = ?";
+				preparedStatement = connectDB().prepareStatement(sql);
+				preparedStatement.setString(1, name);
+				preparedStatement.setInt(2, r_year);
+				preparedStatement.setString(3, author);
+				preparedStatement.setString(4, usage);
+				preparedStatement.setString(5, other);
+				preparedStatement.setInt(6, ID);
+				preparedStatement.executeUpdate();
+			} else {
+				otherC = "DynamicTyped";
+				String sql = "UPDATE " + tableName + " SET Name = ?, ReleaseYear = ?, Author = ?, Usage = ?, " + otherC
+						+ " = ? WHERE ID = ?";
+				preparedStatement = connectDB().prepareStatement(sql);
+				preparedStatement.setString(1, name);
+				preparedStatement.setInt(2, r_year);
+				preparedStatement.setString(3, author);
+				preparedStatement.setString(4, usage);
+				preparedStatement.setBoolean(5, Boolean.parseBoolean(other));
+				preparedStatement.setInt(6, ID);
+				preparedStatement.executeUpdate();
+			}
+			JOptionPane.showMessageDialog(null, "Cập nhật thành công!", "", JOptionPane.INFORMATION_MESSAGE);
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
 
 //	public static void main(String[] args) {

@@ -221,8 +221,8 @@ public class AppHandler {
 			e.printStackTrace();
 		}
 	}
-	
-	public static ArrayList<Language> searchLanguageDatabase(String tableName ,String column, String toFind) {
+
+	public static ArrayList<Language> searchLanguageDatabase(String tableName, String column, String toFind) {
 		ArrayList<Language> lang = new ArrayList<>();
 		try {
 			ConnectDB cdb = new ConnectDB();
@@ -240,5 +240,11 @@ public class AppHandler {
 			e.printStackTrace();
 		}
 		return lang;
+	}
+
+	public static void updateChange2DB(String tableName, int ID, String name, int r_year, String author, String usage,
+			String other) {
+		ConnectDB cdb = new ConnectDB();
+		cdb.updateLanguage(tableName, ID, name, r_year, author, usage, other);
 	}
 }
